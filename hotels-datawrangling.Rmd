@@ -2,6 +2,8 @@
 title: "Hotel bookings - data wrangling"
 author: "Mine Çetinkaya-Rundel"
 output: github_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r load-pkg, message = FALSE}
@@ -10,7 +12,6 @@ library(skimr)
 ```
 
 ```{r load-data, message = FALSE}
-# From TidyTuesday: https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-02-11/readme.md
 hotels <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-11/hotels.csv")
 ```
 
@@ -38,11 +39,11 @@ Fill in the blanks for filtering for hotel bookings where the guest is **not** f
 
 **Note:** You will need to set `eval=TRUE` when you have an answer you want to try out.
 
-```{r travel-whim, eval=FALSE}
+```{r travel-whim, eval=TRUE}
 hotels %>%
   filter(
-    country ____ "USA", 
-    lead_time ____ ____
+    country != "USA", 
+    lead_time < 1 
     )
 ```
 
@@ -57,29 +58,35 @@ In the following chunk, replace
 
 **Note:** You will need to set `eval=TRUE` when you have an answer you want to try out.
 
-```{r some-children, eval=FALSE}
+```{r some-children, eval=TRUE}
 hotels %>%
   filter(
-    children [AT LEAST] 1 [OR] babies [AT LEAST] 1
+    children >= 1 | babies >= 1
     )
 ```
 
 ### Exercise 4.
 
 Do you think it's more likely to find bookings with children or babies in city hotels or resort hotels?
+
+Cities
+
 Test your intuition.
 Using `filter()` determine the number of bookings in resort hotels that have more than 1 child **or** baby in the room?
 Then, do the same for city hotels, and compare the numbers of rows in the resulting filtered data frames.
 
 ```{r resort-children}
-# add code here
-# pay attention to correctness and code style
+hotels %>%
+  filter(hotel == "Resort Hotel",
+    children >= 1 | babies > 1) %>% nrow()
 ```
 
 ```{r city-children}
-# add code here
-# pay attention to correctness and code style
+hotels %>%
+  filter(hotel == "City Hotel",
+    children >= 1 | babies > 1) %>% nrow()
 ```
+
 
 ### Exercise 5.
 
@@ -93,8 +100,8 @@ Your label should be short, informative, and shouldn't include spaces.
 It also shouldn't repeat a previous label, otherwise R Markdown will give you an error about repeated R chunk labels.
 
 ```{r label-me-1}
-# add code here
-# pay attention to correctness and code style
+hotels %>%
+  count("adults", sort = TRUE)
 ```
 
 ### Exercise 6.
@@ -104,9 +111,16 @@ What does this reveal about the surprising results you spotted in the previous e
 
 **Note:** Don't forget to label your R chunk as well (where it says `label-me-2`).
 
-```{r label-me-2}
-# add code here
-# pay attention to correctness and code style
+```{r is canceled = 1}
+hotels %>%
+  filter(is_canceled == 1) %>% 
+  count(adults, sort = TRUE)
+```
+
+```{r is canceled = 0}
+hotels %>%
+  filter(is_canceled == 0) %>% 
+  count(adults, sort = TRUE)
 ```
 
 ### Exercise 7.
