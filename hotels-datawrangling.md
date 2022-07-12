@@ -277,9 +277,23 @@ grouped by `hotel` type so that you can get these statistics separately
 for resort and city hotels. Which type of hotel is higher, on average?
 
 ``` r
-# add code here
-# pay attention to correctness and code style
+hotels %>%
+  group_by(hotel) %>%
+  summarize(
+    min_adr = min(adr),
+    mean_adr = mean(adr),
+    median_adr = median(adr),
+    max_adr = max(adr)
+    )
 ```
+
+    ## # A tibble: 2 × 5
+    ##   hotel        min_adr mean_adr median_adr max_adr
+    ##   <chr>          <dbl>    <dbl>      <dbl>   <dbl>
+    ## 1 City Hotel      0       105.        99.9    5400
+    ## 2 Resort Hotel   -6.38     95.0       75       508
+
+City is higher on average
 
 ### Exercise 8.
 
@@ -295,9 +309,16 @@ reproducible way with some code.
 `select` the relevant columns.
 
 ``` r
-# add code here
-# pay attention to correctness and code style
+hotels %>%
+  filter(adr == min(adr) | adr == max(adr)) %>%
+  select(adr, hotel, arrival_date_day_of_month, arrival_date_year, adults, children, babies)
 ```
+
+    ## # A tibble: 2 × 7
+    ##       adr hotel        arrival_date_day… arrival_date_ye… adults children babies
+    ##     <dbl> <chr>                    <dbl>            <dbl>  <dbl>    <dbl>  <dbl>
+    ## 1   -6.38 Resort Hotel                 5             2017      2        0      0
+    ## 2 5400    City Hotel                  25             2016      2        0      0
 
 ## Data dictionary
 
